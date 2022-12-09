@@ -1,0 +1,37 @@
+#!/bin/bash
+
+PACK_NAME="Shell Kit"
+PACK_CONTENT="zsh, ohmyzsh, powerlevel10k and more plugins"
+
+# Package setup function
+pack-setup(){
+    echo "installing $PACK_NAME..."
+    #Operations
+
+    # Install zsh if not there
+    if ! command -v zsh >/dev/null 2>&1; then
+        sudo nala install -y zsh
+    fi
+
+    # Install ohmyzsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    
+    # Install plugins: git, python, pip, autosuggestions, syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    omz plugin enable git python pip zsh-syntax-highlighting zsh-autosuggestions
+    omz plugin load git python pip zsh-syntax-highlighting zsh-autosuggestions
+
+    # Install Theme: powerlevel10k
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    omz theme set powerlevel10k/powerlevel10k
+    omz theme use powerlevel10k/powerlevel10k
+    
+    # Try: echo "Hello world" | clipboard 
+    # Then paste anywhere with Ctrl+C
+    echo 'alias clipboard="xclip -sel clip"' >> "$HOME/.bashrc"
+    echo 'alias clipboard="xclip -sel clip"' >> "$HOME/.zshrc"
+
+    echo "$PACK_NAME installed sucessfully."
+}
+

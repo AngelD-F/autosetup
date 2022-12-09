@@ -1,0 +1,32 @@
+#!/bin/bash
+
+PACK_NAME="Poetry"
+PACK_CONTENT="Poetry last version"
+
+# Package setup function
+pack-setup(){
+    echo "installing $PACK_NAME..."
+    #Operations
+
+    # Ensure python3 is installed in the system
+    if ! command -v python3 &>/dev/null; then 
+        sudo nala install -y python3
+    fi
+
+    # Install poetry
+    curl -sSL https://install.python-poetry.org | python3 -
+
+    # Completions for bash
+    if command -v bash &>/dev/null; then
+        poetry completions bash >> "$HOME/.bash_completion"
+    fi
+    # Completions for ohmyzsh
+    if command -v omz &>/dev/null; then
+        mkdir $ZSH_CUSTOM/plugins/poetry
+        poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
+        omz plugin enable poetry && omz plugin load poetry
+    fi
+
+    echo "$PACK_NAME installed sucessfully."
+}
+

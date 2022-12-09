@@ -8,11 +8,19 @@ pack-setup(){
     echo "installing $PACK_NAME..."
     curl -fsSL https://get.pnpm.io/install.sh | sh
 
-    if command -v zsh >/dev/null 2>&1; then 
+    "$HOME/.local/share/pnpm/pnpm" install-completion bash
+
+    if command -v zsh &>/dev/null; then 
         echo -e "
-export DENO_INSTALL=\"$HOME/.deno\"
-export PATH=\"\$DENO_INSTALL/bin:\$PATH\"\n
-# Deno end\n" >> "$HOME/.zshrc"
+export PNPM_HOME=\"$HOME/.local/share/pnpm\"
+export PATH=\"\$PNPM_HOME:\$PATH\"\n
+# PNPM end\n" >> "$HOME/.zshrc"
+        echo 'alias pn=pnpm' >> "$HOME/.zshrc"
+
+        # Completions
+        . "$HOME/.zshrc"
+        pnpm install-completion zsh
+        
     fi
 
     echo "$PACK_NAME installed sucessfully."

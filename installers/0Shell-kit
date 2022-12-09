@@ -9,7 +9,7 @@ pack-setup(){
     #Operations
 
     # Install zsh if not there
-    if ! command -v zsh >/dev/null 2>&1; then
+    if ! command -v zsh &>/dev/null; then
         sudo nala install -y zsh
     fi
 

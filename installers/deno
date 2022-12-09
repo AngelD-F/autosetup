@@ -17,12 +17,23 @@ export PATH=\"\$DENO_INSTALL/bin:\$PATH\"\n
 # Deno end\n"
 
     # Bash
-    if command -v bash >/dev/null 2>&1; then 
+    if command -v bash &>/dev/null; then 
         echo "$string" >> "$HOME/.bashrc"
+
+        #completions
+        deno completions bash >> "$HOME/.bash_completion"
+
     fi
     # Zsh
-    if  command -v zsh >/dev/null 2>&1; then 
+    if  command -v zsh &>/dev/null; then 
         echo "$string" >> "$HOME/.zshrc"
+
+        # completions for ohmyzsh
+        if  command -v omz &>/dev/null; then 
+            mkdir $ZSH_CUSTOM/plugins/deno
+            deno completions zsh > $ZSH_CUSTOM/plugins/deno/_deno
+            omz plugin enable deno && omz plugin load deno
+        fi
     fi
 
     echo "$PACK_NAME installed sucessfully."

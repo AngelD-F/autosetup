@@ -1,0 +1,18 @@
+#!/bin/bash
+
+PACK_NAME="KeePassXC"
+PACK_CONTENT="KeePassXC password manager"
+
+# Package setup function
+pack-setup(){
+    echo "installing $PACK_NAME..."
+    #Operations
+    if command -v nala &>/dev/null; then
+        sudo nala install -y keepassxc
+    else
+        sudo apt install -y keepassxc
+    fi
+
+    echo "$PACK_NAME installed sucessfully."
+}
+

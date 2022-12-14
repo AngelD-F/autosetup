@@ -1,0 +1,28 @@
+#!/bin/bash
+
+PACK_NAME="Kitty"
+PACK_CONTENT="Kitty terminal last version"
+
+# Package setup function
+pack-setup(){
+    echo "installing $PACK_NAME..."
+    #Operations
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \
+    dest="$HOME/.local/share" \
+    launch=n
+    
+    # Adding links
+    local kitty_dir="$HOME/.local/share/kitty.app"
+    local apps_dir="$HOME/.local/share/applications"
+    
+    ln -s "$kitty_dir/bin/kitty" "$HOME/bin"
+    cp "$kitty_dir/share/applications/kitty.desktop" "$apps_dir"
+    cp "$kitty_dir/share/applications/kitty-open.desktop" "$apps_dir"
+    
+    sed -i "s|Icon=kitty|Icon=$kitty_dir/share/icons/hicolor/256x256/apps/kitty.png|g" "$apps_dir"/kitty*.desktop
+    sed -i "s|Exec=kitty|Exec=$kitty_dir/.local/kitty.app/bin/kitty|g" "$apps_dir"/kitty*.desktop
+    
+
+    echo "$PACK_NAME installed sucessfully."
+}
+
